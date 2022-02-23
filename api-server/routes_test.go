@@ -5,7 +5,7 @@ import (
 )
 
 func TestRoutes(t *testing.T) {
-	StartAPIServer("888")
+	StartAPIServer("888", "test")
 	server := getApiServer("test")
 	recoveryMid(handler(server))
 }

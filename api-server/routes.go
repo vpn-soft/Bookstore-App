@@ -10,9 +10,8 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func StartAPIServer(port string) {
-	dbName := "test1"
-	server := getApiServer(dbName)
+func StartAPIServer(port, db string) {
+	server := getApiServer(db)
 	utils.ApplyIndices(server.getDatabase())
 	defer server.closeClient()
 	http.ListenAndServe(fmt.Sprintf(":%s", port), recoveryMid(handler(server)))
