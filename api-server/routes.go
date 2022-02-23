@@ -19,7 +19,7 @@ func StartAPIServer(port, db string) {
 
 func handler(server *api_server) *mux.Router {
 	router := mux.NewRouter()
-	router.HandleFunc("/api/v1/books/", server.getBooks).Methods(http.MethodGet)
+	router.HandleFunc("/api/v1/books", server.getBooks).Methods(http.MethodGet)
 	router.HandleFunc("/api/v1/books/{bookid}", server.getBook).Methods(http.MethodGet)
 	router.HandleFunc("/api/v1/book", server.createBook).Methods(http.MethodPost)
 	return router

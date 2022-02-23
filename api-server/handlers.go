@@ -95,7 +95,6 @@ func (server *api_server) getBooks(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	log.Println(limit, offset)
 	var books []models.Book
 	cursor, err := server.getDatabase().Collection(utils.BOOKS).Find(ctx, primitive.M{}, options.Find().SetSkip(int64(offset)).SetLimit(int64(limit)))
 	if err != nil {
@@ -104,15 +103,14 @@ func (server *api_server) getBooks(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	err = cursor.All(ctx, &books)
-	log.Println(books)
-
 	if err != nil {
 		msg := fmt.Sprintf("error while marshalling books from DB :: ERROR:%v\n", err)
 		log.Println(msg)
 		http.Error(w, msg, http.StatusInternalServerError)
 		return
 	}
-	b, err := json.Marshal(books)
+	var response = models.BooksResponse{Books: books, Pagination: models.Pagination{Offset: int64(offset), Limit: int64(limit), Total: int64(len(books))}}
+	b, err := json.Marshal(response)
 	if err != nil {
 		msg := fmt.Sprintf("error while marshalling books :: ERROR:%v\n", err)
 		log.Println(msg)
